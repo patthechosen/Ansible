@@ -1,0 +1,52 @@
+- name: Deploy Apache Webserver with Custom Message
+  hosts: ubuntu
+  become: true
+  vars:
+    welcome_message: "Hello from Ansible on Ubuntu!"
+  tasks:
+    - name: Install Apache
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+        update_cache: true
+
+    - name: Ensure Apache is running
+      ansible.builtin.service:
+        name: apache2
+        state: started
+        enabled: true
+
+    - name: Create custom index.html
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: "This is our first webpage through Ansible with dynamic inventory"
+
+- name: Install Git on Ubuntu Clients
+  hosts: ubuntu
+  become: true
+  tasks:
+    - name: Install Git
+      ansible.builtin.apt:
+        name: git
+        state: present
+        update_cache: true
+
+- name: Ping Ubuntu Clients
+  hosts: tag_ubuntu
+  tasks:
+    - name: Ping clients
+      ansible.builtin.ping:
+
+- name: Ping Amazon Linux Clients
+  tasks:
+    - name: Ping clients
+      ansible.builtin.ping:
+
+- name: Display Name Using Debug
+  hosts: all
+  vars:
+    my_name: "PATRICK TCHAMAGNIE"
+  tasks:
+    - name: Show name using debug
+      ansible.builtin.debug:
+        msg: "My name is {{ PATRICK TCHAMAGNIE }}"

@@ -1,0 +1,34 @@
+# PLAY
+- nane: Install Apache Webserver on Arazon Hosts
+  hosts: amz-clients
+  tasks:
+   - nane: Updates All Packages # yum update -y 
+     ansible.builtin.yun: # <----------- MODULE
+     name: '*'
+     state: latest
+   - nane: Install Apache # yun install httpo -y 
+     ansible.builtin.yun:
+     name: httpd
+     state: installed
+   - nane: Start service httpd, if not started # systenctl start httpd
+     ansible.builtin.service:
+     name: httpd
+     state: started
+   - nane: Enbale service httpd at boot tine # systencel start httpd 
+     ansible.builtin.service:
+     nane: httpd
+     enabled: true
+   - nane: Copy HTML file 
+     ansible.builtin.copy:
+      src: index.html # from the controller
+      dest: /var/vw/htal # to this folder on the host
+
+- name: Fun play
+  hosts: amz-clients
+  vars: #DEFINE YOUR VAR
+   animal name: Alligators
+   tasks:
+- nane: Print message on screen
+  ansible.builtin.debug:
+    msg: "{{ animal_name }} are scary!!!"
+

@@ -1,0 +1,8 @@
+  GNU nano 6.2                                                                               pinging.yml
+- name: Ping AWS EC2
+  hosts: tag_AMZ_Linux  # Ensure this matches the correct inventory group
+  become: true
+  remote_user: ec2-user
+  tasks:
+    - name: Ping Amazon Linux Clients
+      ansible.builtin.ping:
