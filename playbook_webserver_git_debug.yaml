@@ -1,8 +1,10 @@
+---
 - name: Deploy Apache Webserver with Custom Message
-  hosts: ubuntu
+  hosts: Ubuntu
   become: true
+  remote_user: ubuntu
   vars:
-    welcome_message: "Hello from Ansible on Ubuntu!"
+    welcome_message: "Welcome to our firts web server launch trhougt ansible with dynamic inventory by Patrick Tchamagnie"
   tasks:
     - name: Install Apache
       ansible.builtin.apt:
@@ -19,11 +21,14 @@
     - name: Create custom index.html
       ansible.builtin.copy:
         dest: /var/www/html/index.html
-        content: "This is our first webpage through Ansible with dynamic inventory"
+        content: "<html><body><h1 style='color:blue;'>{{ welcome_message }}</h1></body></html>"
+
+
 
 - name: Install Git on Ubuntu Clients
-  hosts: ubuntu
+  hosts: Ubuntu
   become: true
+  remote_user: ubuntu
   tasks:
     - name: Install Git
       ansible.builtin.apt:
@@ -31,22 +36,44 @@
         state: present
         update_cache: true
 
+- name: Verify Git installation
+  hosts: Ubuntu
+  remote_user: ubuntu
+  tasks:
+    - name: Check Git version
+      ansible.builtin.command: git --version
+      register: git_version_output
+
+    - name: Display Git version
+      ansible.builtin.debug:
+        msg: "Git is installed: {{ git_version_output.stdout }}"
+
 - name: Ping Ubuntu Clients
-  hosts: tag_ubuntu
+  hosts: Ubuntu  # Ensuring consistency in tag name
+  remote_user: ubuntu
   tasks:
     - name: Ping clients
       ansible.builtin.ping:
 
 - name: Ping Amazon Linux Clients
+  hosts: AMZ_Linux
+  remote_user: ec2-user
   tasks:
     - name: Ping clients
       ansible.builtin.ping:
 
-- name: Display Name Using Debug
-  hosts: all
-  vars:
-    my_name: "PATRICK TCHAMAGNIE"
+- name: Debug Ubuntu Clients
+  hosts: Ubuntu
+  remote_user: ubuntu
   tasks:
     - name: Show name using debug
       ansible.builtin.debug:
-        msg: "My name is {{ PATRICK TCHAMAGNIE }}"
+        msg: "My name is PATRICK TCHAMAGNIE (Ubuntu Client)"
+
+- name: Debug Amazon Linux Clients
+  hosts: AMZ_Linux
+  remote_user: ec2-user
+  tasks:
+    - name: Show name using debug
+      ansible.builtin.debug:
+        msg: "My name is PATRICK TCHAMAGNIE (Amazon Linux Client)"
