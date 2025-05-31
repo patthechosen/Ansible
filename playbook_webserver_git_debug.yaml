@@ -35,18 +35,12 @@
         name: git
         state: present
         update_cache: true
-
-- name: Verify Git installation
-  hosts: Ubuntu
-  remote_user: ubuntu
-  tasks:
-    - name: Check Git version
+    - name: Verify Git installation
       ansible.builtin.command: git --version
       register: git_version_output
 
     - name: Display Git version
       ansible.builtin.debug:
-        msg: "Git is installed: {{ git_version_output.stdout }}"
 
 - name: Ping Ubuntu Clients
   hosts: Ubuntu  # Ensuring consistency in tag name
